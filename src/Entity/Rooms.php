@@ -43,10 +43,17 @@ class Rooms
     #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'room_id')]
     private Collection $roomImages;
 
+    /**
+     * @var Collection<int, Reviews>
+     */
+    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'room_id')]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
         $this->roomImages = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,6 +187,36 @@ class Rooms
             // set the owning side to null (unless already changed)
             if ($roomImage->getRoomId() === $this) {
                 $roomImage->setRoomId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reviews>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Reviews $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setRoomId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Reviews $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getRoomId() === $this) {
+                $review->setRoomId(null);
             }
         }
 
