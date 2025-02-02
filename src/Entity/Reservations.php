@@ -37,6 +37,9 @@ class Reservations
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\OneToOne(mappedBy: 'reservation_id', cascade: ['persist', 'remove'])]
+    private ?Payements $payements = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,6 +125,28 @@ class Reservations
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getPayements(): ?Payements
+    {
+        return $this->payements;
+    }
+
+    public function setPayements(?Payements $payements): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($payements === null && $this->payements !== null) {
+            $this->payements->setReservationId(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($payements !== null && $payements->getReservationId() !== $this) {
+            $payements->setReservationId($this);
+        }
+
+        $this->payements = $payements;
 
         return $this;
     }
