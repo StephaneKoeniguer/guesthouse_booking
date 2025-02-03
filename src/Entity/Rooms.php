@@ -6,6 +6,7 @@ use App\Repository\RoomsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -20,25 +21,29 @@ class Rooms
 
     #[ORM\Column(length: 255)]
     #[Groups(["getRooms"])]
+    #[Assert\NotBlank(message:"Le nom est obligatoire")]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(["getRooms"])]
+    #[Assert\NotBlank(message:"Las description est obligatoire")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
     #[Groups(["getRooms"])]
+    #[Assert\NotBlank(message:"Le prix est obligatoire")]
     private ?string $pricePerNight = null;
 
     #[ORM\Column]
     #[Groups(["getRooms"])]
+    #[Assert\NotBlank(message:"La capacité d'accueil est obligatoire")]
     private ?int $capacity = null;
 
     #[ORM\Column]
     #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $updatedAt = null;
 

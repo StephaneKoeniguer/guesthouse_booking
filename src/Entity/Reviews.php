@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ReviewsRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -20,6 +21,7 @@ class Reviews
 
     #[ORM\Column(nullable: true)]
     #[Groups(["getRooms"])]
+    #[Assert\NotBlank(message:"La note est obligatoire")]
     private ?int $rating = null;
 
     #[ORM\Column(length: 255, nullable: true)]
