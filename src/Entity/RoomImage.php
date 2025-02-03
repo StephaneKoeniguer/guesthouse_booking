@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RoomImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RoomImageRepository::class)]
 class RoomImage
@@ -11,15 +12,18 @@ class RoomImage
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'roomImages')]
     private ?Rooms $roomId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getRooms"])]
     private ?string $imageUrl = null;
 
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     public final function getId(): ?int

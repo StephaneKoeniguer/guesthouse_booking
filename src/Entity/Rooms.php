@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RoomsRepository::class)]
 class Rooms
@@ -14,39 +15,49 @@ class Rooms
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getRooms"])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(["getRooms"])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[Groups(["getRooms"])]
     private ?string $pricePerNight = null;
 
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?int $capacity = null;
 
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Reservations::class, mappedBy: 'rooms')]
+    #[Groups(["getRooms"])]
     private Collection $reservations;
 
     /**
      * @var Collection<int, RoomImage>
      */
-    #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'roomId')]
+    #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'roomId', cascade: ['persist', 'remove'])]
+    #[Groups(["getRooms"])]
     private Collection $roomImages;
 
     /**
      * @var Collection<int, Reviews>
      */
-    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'roomId')]
+    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'roomId', cascade: ['persist', 'remove'])]
+    #[Groups(["getRooms"])]
     private Collection $reviews;
 
     public function __construct()

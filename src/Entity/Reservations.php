@@ -6,6 +6,7 @@ use App\Repository\ReservationsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,9 +16,11 @@ class Reservations
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Guests::class, inversedBy: 'reservations')]
+    #[Groups(["getRooms"])]
     private ?Guests $guestId = null;
 
     #[ORM\ManyToMany(targetEntity: Rooms::class, inversedBy: 'reservations')]
@@ -25,23 +28,29 @@ class Reservations
     private Collection $rooms;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Choice(choices: ['pending', 'confirmed', 'cancelled'], message: 'Invalid status')]
+    #[Groups(["getRooms"])]
     private ?string $status = null;
 
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(mappedBy: 'reservationId', cascade: ['persist', 'remove'])]
+    #[Groups(["getRooms"])]
     private ?Payements $payements = null;
 
 
