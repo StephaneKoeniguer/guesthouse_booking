@@ -14,51 +14,51 @@ class RoomImage
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'roomImages')]
-    private ?Rooms $room_id = null;
+    private ?Rooms $roomId = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image_url = null;
+    private ?string $imageUrl = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
-    public function getId(): ?int
+    public final function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getRoomId(): ?Rooms
+    public final function getRoomId(): ?Rooms
     {
-        return $this->room_id;
+        return $this->roomId;
     }
 
-    public function setRoomId(?Rooms $room_id): static
+    public final function setRoomId(?Rooms $roomId): static
     {
-        $this->room_id = $room_id;
+        $this->roomId = $roomId;
 
         return $this;
     }
 
-    public function getImageUrl(): ?string
+    public final function getImageUrl(): ?string
     {
-        return $this->image_url;
+        return $this->imageUrl;
     }
 
-    public function setImageUrl(string $image_url): static
+    public final function setImageUrl(string $imageUrl): static
     {
-        $this->image_url = $image_url;
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public final function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public final function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }

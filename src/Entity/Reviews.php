@@ -14,7 +14,7 @@ class Reviews
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'reviews')]
-    private ?Rooms $room_id = null;
+    private ?Rooms $roomId = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $rating = null;
@@ -23,57 +23,57 @@ class Reviews
     private ?string $comment = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
-    public function getId(): ?int
+    public final function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getRoomId(): ?Rooms
+    public final function getRoomId(): ?Rooms
     {
-        return $this->room_id;
+        return $this->roomId;
     }
 
-    public function setRoomId(?Rooms $room_id): static
+    public final function setRoomId(?Rooms $roomId): static
     {
-        $this->room_id = $room_id;
+        $this->roomId = $roomId;
 
         return $this;
     }
 
-    public function getRating(): ?int
+    public final function getRating(): ?int
     {
         return $this->rating;
     }
 
-    public function setRating(?int $rating): static
+    public final function setRating(?int $rating): static
     {
         $this->rating = $rating;
 
         return $this;
     }
 
-    public function getComment(): ?string
+    public final function getComment(): ?string
     {
         return $this->comment;
     }
 
-    public function setComment(?string $comment): static
+    public final function setComment(?string $comment): static
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public final function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public final function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }

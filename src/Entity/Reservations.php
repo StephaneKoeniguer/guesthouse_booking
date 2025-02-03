@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ReservationsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReservationsRepository::class)]
@@ -15,126 +17,122 @@ class Reservations
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reservations')]
-    private ?Guests $guest_id = null;
+    #[ORM\ManyToOne(targetEntity: Guests::class, inversedBy: 'reservations')]
+    private ?Guests $guestId = null;
 
     #[ORM\ManyToMany(targetEntity: Rooms::class, inversedBy: 'reservations')]
     #[ORM\JoinTable(name: 'reservation_room')]
     private Collection $rooms;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $start_date = null;
+    private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $end_date = null;
+    private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Choice(choices: ['pending', 'confirmed', 'cancelled'], message: 'Invalid status')]
     private ?string $status = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToOne(mappedBy: 'reservation_id', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'reservationId', cascade: ['persist', 'remove'])]
     private ?Payements $payements = null;
 
-    public function getId(): ?int
+
+    public function __construct()
+    {
+        $this->rooms = new ArrayCollection();
+    }
+
+    public final function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getGuestId(): ?Guests
+    public final function getGuestId(): ?Guests
     {
-        return $this->guest_id;
+        return $this->guestId;
     }
 
-    public function setGuestId(?Guests $guest_id): static
+    public final function setGuestId(?Guests $guestId): static
     {
-        $this->guest_id = $guest_id;
+        $this->guestId = $guestId;
 
         return $this;
     }
 
-    public function getRoomId(): ?Rooms
+    public final function getStartDate(): ?\DateTimeImmutable
     {
-        return $this->room_id;
+        return $this->startDate;
     }
 
-    public function setRoomId(?Rooms $room_id): static
+    public final function setStartDate(\DateTimeImmutable $startDate): static
     {
-        $this->room_id = $room_id;
+        $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeImmutable
+    public final function getEndDate(): ?\DateTimeImmutable
     {
-        return $this->start_date;
+        return $this->endDate;
     }
 
-    public function setStartDate(\DateTimeImmutable $start_date): static
+    public final function setEndDate(\DateTimeImmutable $endDate): static
     {
-        $this->start_date = $start_date;
+        $this->endDate = $endDate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeImmutable
-    {
-        return $this->end_date;
-    }
-
-    public function setEndDate(\DateTimeImmutable $end_date): static
-    {
-        $this->end_date = $end_date;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
+    public final function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public final function setStatus(string $status): static
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public final function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public final function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public final function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public final function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getPayements(): ?Payements
+    public final function getPayements(): ?Payements
     {
         return $this->payements;
     }
 
-    public function setPayements(?Payements $payements): static
+    public final function setPayements(?Payements $payements): static
     {
         // unset the owning side of the relation if necessary
         if ($payements === null && $this->payements !== null) {
@@ -150,4 +148,24 @@ class Reservations
 
         return $this;
     }
+
+    public final function addRoom(Rooms $room): static
+    {
+        if (!$this->rooms->contains($room)) {
+            $this->rooms->add($room);
+            $room->addReservation($this);
+        }
+
+        return $this;
+    }
+
+    public final function removeRoom(Rooms $room): static
+    {
+        if ($this->rooms->removeElement($room)) {
+            $room->removeReservation($this);
+        }
+
+        return $this;
+    }
+
 }

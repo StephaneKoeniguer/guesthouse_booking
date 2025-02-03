@@ -28,12 +28,12 @@ class Guests
     private ?string $phone = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * @var Collection<int, Reservations>
      */
-    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'guest_id')]
+    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'guestId')]
     private Collection $reservations;
 
     public function __construct()
@@ -41,67 +41,67 @@ class Guests
         $this->reservations = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public final function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public final function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public final function setEmail(string $email): static
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getFirstName(): ?string
+    public final function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): static
+    public final function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getLastName(): ?string
+    public final function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): static
+    public final function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getPhone(): ?string
+    public final function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    public function setPhone(?string $phone): static
+    public final function setPhone(?string $phone): static
     {
         $this->phone = $phone;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public final function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public final function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -109,12 +109,12 @@ class Guests
     /**
      * @return Collection<int, Reservations>
      */
-    public function getReservations(): Collection
+    public final function getReservations(): Collection
     {
         return $this->reservations;
     }
 
-    public function addReservation(Reservations $reservation): static
+    public final function addReservation(Reservations $reservation): static
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
@@ -124,7 +124,7 @@ class Guests
         return $this;
     }
 
-    public function removeReservation(Reservations $reservation): static
+    public final function removeReservation(Reservations $reservation): static
     {
         if ($this->reservations->removeElement($reservation)) {
             // set the owning side to null (unless already changed)

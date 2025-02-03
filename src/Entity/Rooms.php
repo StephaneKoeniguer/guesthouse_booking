@@ -23,16 +23,16 @@ class Rooms
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
-    private ?string $price_per_night = null;
+    private ?string $pricePerNight = null;
 
     #[ORM\Column]
     private ?int $capacity = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Reservations::class, mappedBy: 'rooms')]
     private Collection $reservations;
@@ -40,13 +40,13 @@ class Rooms
     /**
      * @var Collection<int, RoomImage>
      */
-    #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'room_id')]
+    #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'roomId')]
     private Collection $roomImages;
 
     /**
      * @var Collection<int, Reviews>
      */
-    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'room_id')]
+    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'roomId')]
     private Collection $reviews;
 
     public function __construct()
@@ -56,79 +56,79 @@ class Rooms
         $this->reviews = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public final function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public final function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public final function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public final function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public final function setDescription(string $description): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getPricePerNight(): ?string
+    public final function getPricePerNight(): ?string
     {
-        return $this->price_per_night;
+        return $this->pricePerNight;
     }
 
-    public function setPricePerNight(string $price_per_night): static
+    public final function setPricePerNight(string $pricePerNight): static
     {
-        $this->price_per_night = $price_per_night;
+        $this->pricePerNight = $pricePerNight;
 
         return $this;
     }
 
-    public function getCapacity(): ?int
+    public final function getCapacity(): ?int
     {
         return $this->capacity;
     }
 
-    public function setCapacity(int $capacity): static
+    public final function setCapacity(int $capacity): static
     {
         $this->capacity = $capacity;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public final function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public final function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public final function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public final function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -136,28 +136,25 @@ class Rooms
     /**
      * @return Collection<int, Reservations>
      */
-    public function getReservations(): Collection
+    public final function getReservations(): Collection
     {
         return $this->reservations;
     }
 
-    public function addReservation(Reservations $reservation): static
+    public final function addReservation(Reservations $reservation): static
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
-            $reservation->setRoomId($this);
+            $reservation->addRoom($this);
         }
 
         return $this;
     }
 
-    public function removeReservation(Reservations $reservation): static
+    public final function removeReservation(Reservations $reservation): static
     {
         if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getRoomId() === $this) {
-                $reservation->setRoomId(null);
-            }
+            $reservation->removeRoom($this);
         }
 
         return $this;
@@ -166,12 +163,12 @@ class Rooms
     /**
      * @return Collection<int, RoomImage>
      */
-    public function getRoomImages(): Collection
+    public final function getRoomImages(): Collection
     {
         return $this->roomImages;
     }
 
-    public function addRoomImage(RoomImage $roomImage): static
+    public final function addRoomImage(RoomImage $roomImage): static
     {
         if (!$this->roomImages->contains($roomImage)) {
             $this->roomImages->add($roomImage);
@@ -181,7 +178,7 @@ class Rooms
         return $this;
     }
 
-    public function removeRoomImage(RoomImage $roomImage): static
+    public final function removeRoomImage(RoomImage $roomImage): static
     {
         if ($this->roomImages->removeElement($roomImage)) {
             // set the owning side to null (unless already changed)
@@ -196,12 +193,12 @@ class Rooms
     /**
      * @return Collection<int, Reviews>
      */
-    public function getReviews(): Collection
+    public final function getReviews(): Collection
     {
         return $this->reviews;
     }
 
-    public function addReview(Reviews $review): static
+    public final function addReview(Reviews $review): static
     {
         if (!$this->reviews->contains($review)) {
             $this->reviews->add($review);
@@ -211,7 +208,7 @@ class Rooms
         return $this;
     }
 
-    public function removeReview(Reviews $review): static
+    public final function removeReview(Reviews $review): static
     {
         if ($this->reviews->removeElement($review)) {
             // set the owning side to null (unless already changed)

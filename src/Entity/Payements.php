@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PayementsRepository;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PayementsRepository::class)]
@@ -15,79 +16,81 @@ class Payements
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'payements', cascade: ['persist', 'remove'])]
-    private ?Reservations $reservation_id = null;
+    private ?Reservations $reservationId = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
     private ?string $amount = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $payment_date = null;
+    private ?\DateTimeImmutable $paymentDate = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $payment_method = null;
+    private ?string $paymentMethod = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Choice(choices: ['pending', 'confirmed', 'cancelled'], message: 'Invalid status')]
     private ?string $status = null;
 
-    public function getId(): ?int
+    public final function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getReservationId(): ?Reservations
+    public final function getReservationId(): ?Reservations
     {
-        return $this->reservation_id;
+        return $this->reservationId;
     }
 
-    public function setReservationId(?Reservations $reservation_id): static
+    public final function setReservationId(?Reservations $reservationId): static
     {
-        $this->reservation_id = $reservation_id;
+        $this->reservationId = $reservationId;
 
         return $this;
     }
 
-    public function getAmount(): ?string
+    public final function getAmount(): ?string
     {
         return $this->amount;
     }
 
-    public function setAmount(string $amount): static
+    public final function setAmount(string $amount): static
     {
         $this->amount = $amount;
 
         return $this;
     }
 
-    public function getPaymentDate(): ?\DateTimeImmutable
+    public final function getPaymentDate(): ?\DateTimeImmutable
     {
-        return $this->payment_date;
+        return $this->paymentDate;
     }
 
-    public function setPaymentDate(\DateTimeImmutable $payment_date): static
+    public final function setPaymentDate(\DateTimeImmutable $paymentDate): static
     {
-        $this->payment_date = $payment_date;
+        $this->paymentDate = $paymentDate;
 
         return $this;
     }
 
-    public function getPaymentMethod(): ?string
+    public final function getPaymentMethod(): ?string
     {
-        return $this->payment_method;
+        return $this->paymentMethod;
     }
 
-    public function setPaymentMethod(string $payment_method): static
+    public final function setPaymentMethod(string $paymentMethod): static
     {
-        $this->payment_method = $payment_method;
+        $this->paymentMethod = $paymentMethod;
 
         return $this;
     }
 
-    public function getStatus(): ?string
+    public final function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public final function setStatus(string $status): static
     {
         $this->status = $status;
 
