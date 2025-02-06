@@ -66,6 +66,7 @@ class Rooms
     private Collection $reviews;
 
     #[ORM\ManyToOne(inversedBy: 'room')]
+    #[Groups(["getRooms"])]
     private ?Category $category = null;
 
     public function __construct()
