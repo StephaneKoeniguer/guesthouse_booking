@@ -65,6 +65,9 @@ class Rooms
     #[Groups(["getRooms"])]
     private Collection $reviews;
 
+    #[ORM\ManyToOne(inversedBy: 'room')]
+    private ?Category $category = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -232,6 +235,18 @@ class Rooms
                 $review->setRoomId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
