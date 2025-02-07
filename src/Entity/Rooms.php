@@ -69,6 +69,14 @@ class Rooms
     #[Groups(["getRooms"])]
     private ?Category $category = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(["getRooms"])]
+    private ?string $adress = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(["getRooms"])]
+    private ?string $city = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -248,6 +256,30 @@ class Rooms
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(string $adress): static
+    {
+        $this->adress = $adress;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
 
         return $this;
     }

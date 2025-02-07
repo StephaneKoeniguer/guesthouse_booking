@@ -37,6 +37,8 @@ class RoomsFixtures extends Fixture
                 ->setDescription($faker->paragraph())
                 ->setPricePerNight($faker->randomFloat(2, 50, 500))
                 ->setCapacity($faker->numberBetween(1, 6))
+                ->setAdress($faker->streetAddress())
+                ->setCity($faker->city())
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUpdatedAt(new \DateTimeImmutable());
 
@@ -46,9 +48,10 @@ class RoomsFixtures extends Fixture
 
             // Création des images associées
             for ($j = 0; $j < $faker->numberBetween(1, 5); $j++) {
+                $randomNumber = $faker->numberBetween(1, 50);
                 $roomImage = new RoomImage();
                 $roomImage->setRoomId($room)
-                    ->setImageUrl($faker->imageUrl())
+                    ->setImageUrl("https://picsum.photos/800/450?random=$randomNumber")
                     ->setCreatedAt(new \DateTimeImmutable());
 
                 $manager->persist($roomImage);
