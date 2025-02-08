@@ -7,7 +7,6 @@ use App\Entity\RoomImage;
 use App\Entity\Rooms;
 use App\Repository\CategoryRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
