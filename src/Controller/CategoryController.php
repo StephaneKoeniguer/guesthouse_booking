@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -61,9 +62,10 @@ final class CategoryController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/api/categories', name: 'app_create_category', methods: ['POST'])]
-    public function createRoom(Request $request, SerializerInterface $serializer,
-                               EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator,
-                               ValidatorInterface $validator): JsonResponse
+    #[IsGranted('ROLE_ADMIN')]
+    public function createCategory(Request $request, SerializerInterface $serializer,
+                                   EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator,
+                                   ValidatorInterface $validator): JsonResponse
     {
         $category = $serializer->deserialize($request->getContent(), Category::class, 'json');
 

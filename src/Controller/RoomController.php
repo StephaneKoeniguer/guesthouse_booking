@@ -63,6 +63,7 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/api/rooms', name: 'app_create_room', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function createRoom(Request $request, SerializerInterface $serializer,
                                EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator,
                                ValidatorInterface $validator): JsonResponse
@@ -95,10 +96,17 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/api/rooms/{id}', name: 'app_update_room', methods: ['PUT'])]
+    #[IsGranted('ROLE_USER')]
     public function UpdateRoom(int $id, Request $request, RoomsRepository $roomsRepository,
                                SerializerInterface $serializer, EntityManagerInterface $em,
                                ValidatorInterface $validator): JsonResponse
     {
+
+        // Vérifier si le corps de la requête est vide
+        if (empty($request->getContent())) {
+            return new JsonResponse(['message' => 'Request body cannot be empty'], Response::HTTP_BAD_REQUEST);
+        }
+
         $updateRoom = $serializer->deserialize($request->getContent(),
             Rooms::class,
             'json',
@@ -123,6 +131,7 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/api/rooms/{id}', name: 'app_delete_room', methods: ['DELETE'])]
+    #[IsGranted('ROLE_USER')]
     public function deleteRoom(int $id, RoomsRepository $roomsRepository, EntityManagerInterface $em): JsonResponse
     {
         $room = $roomsRepository->find($id);
