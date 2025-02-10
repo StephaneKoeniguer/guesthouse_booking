@@ -33,31 +33,36 @@ final class RegisterController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['username']) || !isset($data['password'])) {
-            return new JsonResponse("Email et mot de passe requis", Response::HTTP_BAD_REQUEST, [], true);
+
+        // Vérification des champs obligatoires
+        if (empty($data['email']) || empty($data['password']) || empty($data['firstName']) || empty($data['lastName'])) {
+            return new JsonResponse(['message' => 'Email, mot de passe, prénom et nom sont requis'], Response::HTTP_BAD_REQUEST);
         }
 
         // Vérifier si l'utilisateur existe déjà
-        $existingUser = $userRepository->findOneBy(['email' => $data['username']]);
+        $existingUser = $userRepository->findOneBy(['email' => $data['email']]);
         if ($existingUser) {
-            return new JsonResponse("Un utilisateur existe déja", Response::HTTP_BAD_REQUEST,[], true);
+            return new JsonResponse(['message' => "Un utilisateur existe déja"], Response::HTTP_BAD_REQUEST);
         }
 
         // Créer un nouvel utilisateur
         $user = new User();
-        $user->setEmail($data['username']);
-        $user->setPassword($passwordHasher->hashPassword($user,$data['password']));
+        $user->setEmail($data['email'])
+             ->setFirstName($data['firstName'])
+             ->setLastName($data['lastName'])
+             ->setRoles(["ROLE_USER"])
+             ->setPassword($passwordHasher->hashPassword($user,$data['password']));
 
         // Vérifier les contraintes sur l'entité
         $errors = $validator->validate($user);
         if (count($errors) > 0) {
-            return new JsonResponse($serializer->serialize($errors, 'json'), Response::HTTP_BAD_REQUEST, [], true);
+            return new JsonResponse($serializer->serialize($errors, 'json'), Response::HTTP_BAD_REQUEST);
         }
 
         $em->persist($user);
         $em->flush();
 
-        return new JsonResponse("Utilisateur crée", Response::HTTP_CREATED, [], true);
+        return new JsonResponse(['message' => "Utilisateur crée"], Response::HTTP_CREATED);
 
     }
 }
