@@ -14,7 +14,7 @@ class ReservationsFixtures extends Fixture implements DependentFixtureInterface
 {
     public final function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
 
         // Charger les invités et les chambres existants
         $guests = $manager->getRepository(Guests::class)->findAll();

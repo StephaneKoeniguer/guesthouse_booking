@@ -20,7 +20,7 @@ class RoomsFixtures extends Fixture
 
     public final function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
 
         $categories = $this->categoryRepository->findAll();
 
@@ -29,10 +29,10 @@ class RoomsFixtures extends Fixture
         }
 
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             // Création de la chambre
             $room = new Rooms();
-            $room->setName('Room ' . $i + 1)
+            $room->setName($faker->word())
                 ->setDescription($faker->paragraph())
                 ->setPricePerNight($faker->randomFloat(2, 50, 500))
                 ->setCapacity($faker->numberBetween(1, 6))

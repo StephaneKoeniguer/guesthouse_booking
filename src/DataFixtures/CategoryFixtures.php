@@ -14,7 +14,7 @@ class CategoryFixtures extends Fixture
     public final function load(ObjectManager $manager): void
     {
 
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
 
 
         $categories = [
