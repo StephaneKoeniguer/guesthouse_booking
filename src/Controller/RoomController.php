@@ -25,10 +25,25 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/api/rooms', name: 'app_room', methods: ['GET'])]
-    public function getRoomList(RoomsRepository $roomsRepository, SerializerInterface $serializer): JsonResponse
+    public function getRoomList(Request $request, RoomsRepository $roomsRepository, SerializerInterface $serializer): JsonResponse
     {
+
+        // Récupération des paramètres de pagination de la requête
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 12);
+        /*$roomList = $roomsRepository->findAllWidthPagination($page, $limit);*/
+
+
         $roomList = $roomsRepository->findAll();
         $jsonRoomList = $serializer->serialize($roomList, 'json', ['groups' => 'getRooms']);
+
+        dd($jsonRoomList);
+
+        $response = [
+            'rooms' => $jsonRoomList,
+            'totalItems' => $roomList['totalItems'],
+            'totalPages' => $roomList['totalPages'],
+        ];
 
         return new JsonResponse($jsonRoomList, Response::HTTP_OK,[], true);
     }
