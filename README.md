@@ -70,7 +70,5 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 
 - **Backend** : Symfony 7.2
 - **Base de données** : MySQL
-- **Frontend** : React
-- **Mobile** : React Native avec Expo
 
 ---
