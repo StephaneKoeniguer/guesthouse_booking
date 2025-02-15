@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Rooms;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,6 +16,23 @@ class RoomsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Rooms::class);
     }
+
+
+    public final function findAllWidthPagination(int $page, int $limit): array
+    {
+        $query = $this->createQueryBuilder('r')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+        return [
+            'rooms' => $paginator->getQuery()->getResult(),
+            'totalItems' => count($paginator),
+            'totalPages' => ceil(count($paginator) / $limit),
+        ];
+    }
+
 
     //    /**
     //     * @return Rooms[] Returns an array of Rooms objects
