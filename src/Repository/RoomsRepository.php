@@ -20,13 +20,19 @@ class RoomsRepository extends ServiceEntityRepository
 
     public final function findAllWidthPagination(int $page, int $limit): array
     {
-        $qb = $this->createQueryBuilder('r')
-                ->setFirstResult(($page - 1) * $limit)
-                ->setMaxResults($limit);
+        $query = $this->createQueryBuilder('r')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
 
-        return $qb->getQuery()->getResult();
-
+        $paginator = new Paginator($query);
+        return [
+            'rooms' => $paginator->getQuery()->getResult(),
+            'totalItems' => count($paginator),
+            'totalPages' => ceil(count($paginator) / $limit),
+        ];
     }
+
 
     //    /**
     //     * @return Rooms[] Returns an array of Rooms objects

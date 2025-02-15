@@ -19,7 +19,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class RoomController extends AbstractController
 {
     /**
-     * Display a list of Rooms
+     * Display a list of rooms with pagination
+     * @param Request $request
      * @param RoomsRepository $roomsRepository
      * @param SerializerInterface $serializer
      * @return JsonResponse
@@ -27,25 +28,20 @@ final class RoomController extends AbstractController
     #[Route('/api/rooms', name: 'app_room', methods: ['GET'])]
     public function getRoomList(Request $request, RoomsRepository $roomsRepository, SerializerInterface $serializer): JsonResponse
     {
-
         // Récupération des paramètres de pagination de la requête
         $page = $request->get('page', 1);
-        $limit = $request->get('limit', 12);
-        /*$roomList = $roomsRepository->findAllWidthPagination($page, $limit);*/
+        $limit = $request->get('limit', 2);
+        $roomList = $roomsRepository->findAllWidthPagination($page, $limit);
 
-
-        $roomList = $roomsRepository->findAll();
-        $jsonRoomList = $serializer->serialize($roomList, 'json', ['groups' => 'getRooms']);
-
-        dd($jsonRoomList);
+        $rooms = $serializer->normalize($roomList['rooms'], null, ['groups' => 'getRooms']);
 
         $response = [
-            'rooms' => $jsonRoomList,
+            'rooms' => $rooms,
             'totalItems' => $roomList['totalItems'],
             'totalPages' => $roomList['totalPages'],
         ];
 
-        return new JsonResponse($jsonRoomList, Response::HTTP_OK,[], true);
+        return new JsonResponse($response, Response::HTTP_OK);
     }
 
 
