@@ -13,23 +13,23 @@ class Reviews
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReview"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'reviews')]
     private ?Rooms $roomId = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReview"])]
     #[Assert\NotBlank(message:"La note est obligatoire")]
     private ?int $rating = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReview"])]
     private ?string $comment = null;
 
     #[ORM\Column]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReview"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     public final function getId(): ?int
