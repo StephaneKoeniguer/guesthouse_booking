@@ -29,7 +29,34 @@ class RoomsRepository extends ServiceEntityRepository
         return [
             'rooms' => $paginator->getQuery()->getResult(),
             'totalItems' => count($paginator),
-            'totalPages' => ceil(count($paginator) / $limit),
+            'totalPages' => ceil(count($paginator) / $limit)
+        ];
+    }
+
+    public final function findRoomsPerCategoryWithPagination(int $page, int $limit, ?int $categoryId = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+
+        // Ajout de la condition pour la catégorie si une catégorie est fournie
+        if ($categoryId !== null) {
+            $queryBuilder
+                ->join('r.category', 'c') // Jointure avec l'entité catégorie
+                ->andWhere('c.id = :categoryId') // Condition sur l'ID de la catégorie
+                ->setParameter('categoryId', $categoryId); // Paramètre pour éviter les injections SQL
+        }
+
+        $queryBuilder
+            ->setFirstResult(($page - 1) * $limit) // Pagination : premier résultat
+            ->setMaxResults($limit); // Pagination : nombre de résultats
+
+        $query = $queryBuilder->getQuery();
+
+        $paginator = new Paginator($query);
+
+        return [
+            'rooms' => $paginator->getQuery()->getResult(),
+            'totalItems' => count($paginator),
+            'totalPages' => ceil(count($paginator) / $limit)
         ];
     }
 

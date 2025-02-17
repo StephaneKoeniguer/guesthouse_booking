@@ -44,6 +44,34 @@ final class RoomController extends AbstractController
         return new JsonResponse($response, Response::HTTP_OK);
     }
 
+    /**
+     * Display a list of rooms for a given category
+     * @param Request $request
+     * @param RoomsRepository $roomsRepository
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    #[Route('/api/rooms/category', name: 'app_room_category', methods: ['GET'])]
+    public function getRoomListPerCategory(Request $request, RoomsRepository $roomsRepository, SerializerInterface $serializer): JsonResponse
+    {
+        // Récupération des paramètres de pagination et de la catégorie
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 2);
+        $categoryId = $request->get('category');
+
+        $roomList = $roomsRepository->findRoomsPerCategoryWithPagination($page, $limit, $categoryId);
+
+        $rooms = $serializer->normalize($roomList['rooms'], null, ['groups' => 'getRooms']);
+
+        $response = [
+            'rooms' => $rooms,
+            'totalItems' => $roomList['totalItems'],
+            'totalPages' => $roomList['totalPages'],
+        ];
+
+        return new JsonResponse($response, Response::HTTP_OK);
+    }
+
 
     /**
      *  Display details of a Room
