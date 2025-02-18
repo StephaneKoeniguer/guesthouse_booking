@@ -77,6 +77,10 @@ class Rooms
     #[Groups(["getRooms"])]
     private ?string $city = null;
 
+    #[ORM\Column]
+    #[Groups(["getRooms"])]
+    private ?int $zipdCode = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -280,6 +284,18 @@ class Rooms
     public function setCity(string $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getZipdCode(): ?int
+    {
+        return $this->zipdCode;
+    }
+
+    public function setZipdCode(int $zipdCode): static
+    {
+        $this->zipdCode = $zipdCode;
 
         return $this;
     }

@@ -6,6 +6,7 @@ use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use App\Faker\CategoryProvider;
 
 class CategoryFixtures extends Fixture
 {
@@ -15,22 +16,13 @@ class CategoryFixtures extends Fixture
     {
 
         $faker = Factory::create('fr_FR');
+        $faker->addProvider(new CategoryProvider($faker));
 
-
-        $categories = [
-            'Mer',
-            'Montagne',
-            'Neige',
-            'Soleil',
-            'Balade',
-            'Campagne',
-            'Urbain'
-        ];
-
-        foreach ($categories as $categoryName) {
+        // Création des catégories
+        for ($i = 0; $i < 7; $i++) {
             $category = new Category();
-            $category->setName($categoryName)
-                     ->setDescription($faker->paragraph());
+            $category->setName($faker->category());
+            $category->setDescription($faker->categoryDescription());
 
             $manager->persist($category);
         }

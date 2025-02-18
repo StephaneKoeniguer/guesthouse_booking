@@ -21,18 +21,20 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create();
 
+        for ($i = 0; $i < 10; $i++) {
+            $user = new User();
+            $user->setEmail($faker->unique()->email())
+                ->setRoles(['ROLE_USER'])
+                ->setFirstName($faker->firstName())
+                ->setLastName($faker->lastName());
 
-        $user = new User();
-        $user->setEmail('user@example.com')
-             ->setRoles(['ROLE_USER'])
-             ->setFirstName($faker->firstName())
-             ->setLastName($faker->lastName());
+            // Hachage du mot de passe
+            $hashedPassword = $this->passwordHasher->hashPassword($user, 'password123');
+            $user->setPassword($hashedPassword);
 
-        // Hachage du mot de passe
-        $hashedPassword = $this->passwordHasher->hashPassword($user, 'password123');
-        $user->setPassword($hashedPassword);
+            $manager->persist($user);
+        }
 
-        $manager->persist($user);
         $manager->flush();
     }
 
