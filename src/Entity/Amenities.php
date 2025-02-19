@@ -14,6 +14,7 @@ class Amenities
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getRooms"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
