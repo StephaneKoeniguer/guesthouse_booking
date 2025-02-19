@@ -2,12 +2,15 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Amenities;
 use App\Entity\Reviews;
 use App\Entity\RoomImage;
 use App\Entity\Rooms;
+use App\Faker\AmenitieProvider;
 use App\Faker\CategoryProvider;
 use App\Faker\ReviewProvider;
 use App\Faker\RoomProvider;
+use App\Repository\AmenitiesRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -21,7 +24,8 @@ class RoomsFixtures extends Fixture implements DependentFixtureInterface
 
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
-        private readonly UserRepository $userRepository)
+        private readonly UserRepository $userRepository,
+        private readonly AmenitiesRepository $amenitiesRepository)
     {}
 
 
@@ -35,6 +39,7 @@ class RoomsFixtures extends Fixture implements DependentFixtureInterface
 
         $categories = $this->categoryRepository->findAll();
         $users = $this->userRepository->findAll();
+        $amenities = $this->amenitiesRepository->findAll();
 
         if (empty($categories)) {
             throw new \RuntimeException('Aucune catégorie trouvée. Veuillez les créer avant d’exécuter les fixtures.');
@@ -54,6 +59,7 @@ class RoomsFixtures extends Fixture implements DependentFixtureInterface
                 ->setCategory($faker->randomElement($categories))
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUpdatedAt(new \DateTimeImmutable());
+
 
 
             // Création des images associées
@@ -79,6 +85,17 @@ class RoomsFixtures extends Fixture implements DependentFixtureInterface
                 $manager->persist($review);
             }
 
+
+            // Associer les équipements à la chambre
+            $selectedAmenities = [];
+            for ($l = 0; $l < $faker->numberBetween(1, 3); $l++) {
+                do {
+                    $randomAmenity = $faker->randomElement($amenities);
+                } while (in_array($randomAmenity, $selectedAmenities, true)); // Vérifie si l'équipement est déjà sélectionné
+
+                $selectedAmenities[] = $randomAmenity; // Ajoute l'équipement à la liste temporaire
+                $room->addAmenity($randomAmenity);    // Associe l'équipement à la chambre
+            }
 
             $manager->persist($room);
         }

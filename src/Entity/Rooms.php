@@ -81,11 +81,19 @@ class Rooms
     #[Groups(["getRooms"])]
     private ?int $zipdCode = null;
 
+    /**
+     * @var Collection<int, Amenities>
+     */
+    #[ORM\ManyToMany(targetEntity: Amenities::class, mappedBy: 'room')]
+    #[Groups(["getRooms"])]
+    private Collection $amenities;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
         $this->roomImages = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->amenities = new ArrayCollection();
     }
 
     public final function getId(): ?int
@@ -296,6 +304,33 @@ class Rooms
     public function setZipdCode(int $zipdCode): static
     {
         $this->zipdCode = $zipdCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Amenities>
+     */
+    public function getAmenities(): Collection
+    {
+        return $this->amenities;
+    }
+
+    public function addAmenity(Amenities $amenity): static
+    {
+        if (!$this->amenities->contains($amenity)) {
+            $this->amenities->add($amenity);
+            $amenity->addRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAmenity(Amenities $amenity): static
+    {
+        if ($this->amenities->removeElement($amenity)) {
+            $amenity->removeRoom($this);
+        }
 
         return $this;
     }
