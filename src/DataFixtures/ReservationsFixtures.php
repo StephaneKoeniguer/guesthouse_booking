@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Guests;
 use App\Entity\Reservations;
 use App\Entity\Rooms;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -19,8 +20,8 @@ class ReservationsFixtures extends Fixture implements DependentFixtureInterface
         // Charger les invités et les chambres existants
         $guests = $manager->getRepository(Guests::class)->findAll();
         $rooms = $manager->getRepository(Rooms::class)->findAll();
+        $users = $manager->getRepository(User::class)->findAll();
 
-        // Vérifiez que des données existent pour les invités et les chambres
         if (empty($guests) || empty($rooms)) {
             throw new \RuntimeException('Assurez-vous d\'avoir des données pour Guests et Rooms avant de charger les Reservations.');
         }
@@ -28,9 +29,11 @@ class ReservationsFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 20; $i++) {
             $reservation = new Reservations();
 
-            // Attribuer un invité aléatoire
-            $guest = $faker->randomElement($guests);
-            $reservation->setGuestId($guest);
+            if ($faker->boolean(50)) { // 50% de chances pour un invité
+                $reservation->setGuestId($faker->randomElement($guests));
+            } else {
+                $reservation->setUser($faker->randomElement($users));
+            }
 
             // Attribuer une ou plusieurs chambres
             $numRooms = $faker->numberBetween(1, 3);
@@ -66,6 +69,7 @@ class ReservationsFixtures extends Fixture implements DependentFixtureInterface
         return [
             GuestsFixtures::class,
             RoomsFixtures::class,
+            UserFixtures::class,
         ];
     }
 }

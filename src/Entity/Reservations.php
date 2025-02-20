@@ -53,6 +53,9 @@ class Reservations
     #[Groups(["getRooms"])]
     private ?Payements $payements = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    private ?User $user = null;
+
 
     public function __construct()
     {
@@ -173,6 +176,18 @@ class Reservations
         if ($this->rooms->removeElement($room)) {
             $room->removeReservation($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
