@@ -17,7 +17,7 @@ class Reviews
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'reviews')]
-    private ?Rooms $roomId = null;
+    private ?Rooms $room = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(["getRooms", "getReview"])]
@@ -43,12 +43,12 @@ class Reviews
 
     public final function getRoomId(): ?Rooms
     {
-        return $this->roomId;
+        return $this->room;
     }
 
-    public final function setRoomId(?Rooms $roomId): static
+    public final function setRoomId(?Rooms $room): static
     {
-        $this->roomId = $roomId;
+        $this->room = $room;
 
         return $this;
     }

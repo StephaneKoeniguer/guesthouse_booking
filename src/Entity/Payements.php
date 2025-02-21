@@ -16,7 +16,7 @@ class Payements
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'payements', cascade: ['persist', 'remove'])]
-    private ?Reservations $reservationId = null;
+    private ?Reservations $reservation = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
     private ?string $amount = null;
@@ -39,12 +39,12 @@ class Payements
 
     public final function getReservationId(): ?Reservations
     {
-        return $this->reservationId;
+        return $this->reservation;
     }
 
-    public final function setReservationId(?Reservations $reservationId): static
+    public final function setReservationId(?Reservations $reservation): static
     {
-        $this->reservationId = $reservationId;
+        $this->reservation = $reservation;
 
         return $this;
     }

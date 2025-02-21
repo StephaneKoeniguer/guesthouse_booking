@@ -45,8 +45,9 @@ class RoomsFixtures extends Fixture implements DependentFixtureInterface
                 ->setCapacity($faker->numberBetween(1, 6))
                 ->setAdress($faker->streetAddress())
                 ->setCity($faker->city())
-                ->setZipdCode($faker->postcode())
+                ->setZipCode($faker->postcode())
                 ->setCategory($faker->randomElement($categories))
+                ->setUser($faker->randomElement($users))
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUpdatedAt(new \DateTimeImmutable());
 

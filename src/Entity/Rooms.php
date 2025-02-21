@@ -54,14 +54,14 @@ class Rooms
     /**
      * @var Collection<int, RoomImage>
      */
-    #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'roomId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'room', cascade: ['persist', 'remove'])]
     #[Groups(["getRooms"])]
     private Collection $roomImages;
 
     /**
      * @var Collection<int, Reviews>
      */
-    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'roomId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'room', cascade: ['persist', 'remove'])]
     #[Groups(["getRooms"])]
     private Collection $reviews;
 
@@ -79,7 +79,7 @@ class Rooms
 
     #[ORM\Column]
     #[Groups(["getRooms"])]
-    private ?int $zipdCode = null;
+    private ?int $zipCode = null;
 
     /**
      * @var Collection<int, Amenities>
@@ -87,6 +87,9 @@ class Rooms
     #[ORM\ManyToMany(targetEntity: Amenities::class, mappedBy: 'room')]
     #[Groups(["getRooms"])]
     private Collection $amenities;
+
+    #[ORM\ManyToOne(inversedBy: 'rooms')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -296,14 +299,14 @@ class Rooms
         return $this;
     }
 
-    public function getZipdCode(): ?int
+    public function getZipCode(): ?int
     {
-        return $this->zipdCode;
+        return $this->zipCode;
     }
 
-    public function setZipdCode(int $zipdCode): static
+    public function setZipCode(int $zipCode): static
     {
-        $this->zipdCode = $zipdCode;
+        $this->zipCode = $zipCode;
 
         return $this;
     }
@@ -331,6 +334,18 @@ class Rooms
         if ($this->amenities->removeElement($amenity)) {
             $amenity->removeRoom($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

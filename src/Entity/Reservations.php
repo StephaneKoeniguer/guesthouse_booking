@@ -21,7 +21,7 @@ class Reservations
 
     #[ORM\ManyToOne(targetEntity: Guests::class, inversedBy: 'reservations')]
     #[Groups(["getRooms"])]
-    private ?Guests $guestId = null;
+    private ?Guests $guest = null;
 
     #[ORM\ManyToMany(targetEntity: Rooms::class, inversedBy: 'reservations')]
     #[ORM\JoinTable(name: 'reservation_room')]
@@ -49,7 +49,7 @@ class Reservations
     #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToOne(mappedBy: 'reservationId', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'reservation', cascade: ['persist', 'remove'])]
     #[Groups(["getRooms"])]
     private ?Payements $payements = null;
 
@@ -69,12 +69,12 @@ class Reservations
 
     public final function getGuestId(): ?Guests
     {
-        return $this->guestId;
+        return $this->guest;
     }
 
-    public final function setGuestId(?Guests $guestId): static
+    public final function setGuestId(?Guests $guest): static
     {
-        $this->guestId = $guestId;
+        $this->guest = $guest;
 
         return $this;
     }

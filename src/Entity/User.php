@@ -57,10 +57,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'user')]
     private Collection $reservations;
 
+    /**
+     * @var Collection<int, Rooms>
+     */
+    #[ORM\OneToMany(targetEntity: Rooms::class, mappedBy: 'user')]
+    private Collection $rooms;
+
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->rooms = new ArrayCollection();
     }
 
     public final function getId(): ?int
@@ -216,6 +223,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($reservation->getUser() === $this) {
                 $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rooms>
+     */
+    public function getRooms(): Collection
+    {
+        return $this->rooms;
+    }
+
+    public function addRoom(Rooms $room): static
+    {
+        if (!$this->rooms->contains($room)) {
+            $this->rooms->add($room);
+            $room->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoom(Rooms $room): static
+    {
+        if ($this->rooms->removeElement($room)) {
+            // set the owning side to null (unless already changed)
+            if ($room->getUser() === $this) {
+                $room->setUser(null);
             }
         }
 

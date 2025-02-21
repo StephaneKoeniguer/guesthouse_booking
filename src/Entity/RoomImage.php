@@ -16,7 +16,7 @@ class RoomImage
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'roomImages')]
-    private ?Rooms $roomId = null;
+    private ?Rooms $room = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(["getRooms"])]
@@ -33,12 +33,12 @@ class RoomImage
 
     public final function getRoomId(): ?Rooms
     {
-        return $this->roomId;
+        return $this->room;
     }
 
-    public final function setRoomId(?Rooms $roomId): static
+    public final function setRoomId(?Rooms $room): static
     {
-        $this->roomId = $roomId;
+        $this->room = $room;
 
         return $this;
     }
