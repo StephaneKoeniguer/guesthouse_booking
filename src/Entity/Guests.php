@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\GuestsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,17 +19,21 @@ class Guests
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"L'adresse mail est obligatoire")]
+    #[Groups(["getReservations"])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Le prénom est obligatoire")]
+    #[Groups(["getReservations"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Le nom est obligatoire")]
+    #[Groups(["getReservations"])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["getReservations"])]
     private ?string $phone = null;
 
     #[ORM\Column]

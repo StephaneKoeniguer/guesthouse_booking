@@ -16,26 +16,26 @@ class Rooms
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     #[Assert\NotBlank(message:"Le nom est obligatoire")]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     #[Assert\NotBlank(message:"Las description est obligatoire")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     #[Assert\NotBlank(message:"Le prix est obligatoire")]
     private ?string $pricePerNight = null;
 
     #[ORM\Column]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     #[Assert\NotBlank(message:"La capacité d'accueil est obligatoire")]
     private ?int $capacity = null;
 
@@ -62,23 +62,23 @@ class Rooms
      * @var Collection<int, Reviews>
      */
     #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'room', cascade: ['persist', 'remove'])]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private Collection $reviews;
 
     #[ORM\ManyToOne(inversedBy: 'room')]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?string $adress = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?string $city = null;
 
     #[ORM\Column]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?int $zipCode = null;
 
     /**
@@ -89,6 +89,7 @@ class Rooms
     private Collection $amenities;
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
+    #[Groups(["getRooms"])]
     private ?User $user = null;
 
     public function __construct()

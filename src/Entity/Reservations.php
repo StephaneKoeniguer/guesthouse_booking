@@ -16,11 +16,11 @@ class Reservations
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Guests::class, inversedBy: 'reservations')]
-    #[Groups(["getRooms"])]
+    #[Groups(["getReservations"])]
     private ?Guests $guest = null;
 
     #[ORM\ManyToMany(targetEntity: Rooms::class, inversedBy: 'reservations')]
@@ -28,32 +28,31 @@ class Reservations
     private Collection $rooms;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Choice(choices: ['pending', 'confirmed', 'cancelled'], message: 'Invalid status')]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?string $status = null;
 
     #[ORM\Column]
-    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(["getRooms"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(mappedBy: 'reservation', cascade: ['persist', 'remove'])]
-    #[Groups(["getRooms"])]
+    #[Groups(["getRooms", "getReservations"])]
     private ?Payements $payements = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[Groups(["getReservations"])]
     private ?User $user = null;
 
 

@@ -40,9 +40,9 @@ class ReviewsRepository extends ServiceEntityRepository
         // Ajout de la condition pour la room si une room est fournie
         if ($roomId !== null) {
             $queryBuilder
-                ->join('re.roomId', 'r')
-                ->andWhere('r.id = :roomId')
-                ->setParameter('roomId', $roomId);
+                ->join('re.room', 'r')
+                ->andWhere('r.id = :room')
+                ->setParameter('room', $roomId);
         }
 
         $queryBuilder
