@@ -19,21 +19,21 @@ class Guests
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"L'adresse mail est obligatoire")]
-    #[Groups(["getReservations"])]
+    #[Groups(["getReview"])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Le prénom est obligatoire")]
-    #[Groups(["getReservations"])]
+    #[Groups(["getReview"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Le nom est obligatoire")]
-    #[Groups(["getReservations"])]
+    #[Groups(["getReview"])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["getReservations"])]
+    #[Groups(["getReview"])]
     private ?string $phone = null;
 
     #[ORM\Column]
@@ -45,9 +45,16 @@ class Guests
     #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'guest')]
     private Collection $reservations;
 
+    /**
+     * @var Collection<int, Reviews>
+     */
+    #[ORM\OneToMany(targetEntity: Reviews::class, mappedBy: 'guest')]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public final function getId(): ?int
@@ -139,6 +146,36 @@ class Guests
             // set the owning side to null (unless already changed)
             if ($reservation->getGuestId() === $this) {
                 $reservation->setGuestId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reviews>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Reviews $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setGuest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Reviews $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getGuest() === $this) {
+                $review->setGuest(null);
             }
         }
 

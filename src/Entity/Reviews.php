@@ -36,6 +36,10 @@ class Reviews
     #[Groups(["getRooms", "getReview"])]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    #[Groups(["getRooms", "getReview"])]
+    private ?Guests $guest = null;
+
     public final function getId(): ?int
     {
         return $this->id;
@@ -97,6 +101,18 @@ class Reviews
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGuest(): ?Guests
+    {
+        return $this->guest;
+    }
+
+    public function setGuest(?Guests $guest): static
+    {
+        $this->guest = $guest;
 
         return $this;
     }

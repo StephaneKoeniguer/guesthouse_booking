@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Amenities;
 use App\Entity\Category;
+use App\Entity\Guests;
 use App\Entity\Reviews;
 use App\Entity\RoomImage;
 use App\Entity\Rooms;
@@ -24,6 +25,7 @@ class RoomsFixtures extends Fixture implements DependentFixtureInterface
         $categories = $manager->getRepository(Category::class)->findAll();
         $users = $manager->getRepository(User::class)->findAll();
         $amenities = $manager->getRepository(Amenities::class)->findAll();
+        $guests = $manager->getRepository(Guests::class)->findAll();
 
         $faker = Factory::create('fr_FR');
         $fakerReview = Factory::create('fr_FR');
@@ -65,12 +67,19 @@ class RoomsFixtures extends Fixture implements DependentFixtureInterface
             }
 
             // Création des avis associés
-            for ($k = 0; $k < $faker->numberBetween(1, 5); $k++) {
+            for ($k = 0; $k < $faker->numberBetween(1, 10); $k++) {
                 $review = new Reviews();
+
+                if ($faker->boolean(50)) { // 50% de chances pour un invité
+                    $review->setGuest($faker->randomElement($guests));
+
+                } else {
+                    $review->setUser($faker->randomElement($users));
+                }
+
                 $review->setRoomId($room)
                     ->setComment($fakerReview->reviewDescription()) // méthode du provider
                     ->setRating($faker->numberBetween(1, 5))
-                    ->setUser($faker->randomElement($users))
                     ->setCreatedAt(new \DateTimeImmutable());
 
                 $manager->persist($review);
