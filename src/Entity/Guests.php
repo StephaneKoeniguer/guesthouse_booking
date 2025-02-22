@@ -19,21 +19,21 @@ class Guests
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"L'adresse mail est obligatoire")]
-    #[Groups(["getReview"])]
+    #[Groups(["getReview", "getRooms"])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Le prénom est obligatoire")]
-    #[Groups(["getReview"])]
+    #[Groups(["getReview", "getRooms"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Le nom est obligatoire")]
-    #[Groups(["getReview"])]
+    #[Groups(["getReview", "getRooms"])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["getReview"])]
+    #[Groups(["getReview", "getRooms"])]
     private ?string $phone = null;
 
     #[ORM\Column]

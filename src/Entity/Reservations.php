@@ -25,6 +25,7 @@ class Reservations
 
     #[ORM\ManyToMany(targetEntity: Rooms::class, inversedBy: 'reservations')]
     #[ORM\JoinTable(name: 'reservation_room')]
+    #[Groups(["getReservations"])]
     private Collection $rooms;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
@@ -48,7 +49,7 @@ class Reservations
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(mappedBy: 'reservation', cascade: ['persist', 'remove'])]
-    #[Groups(["getRooms", "getReservations"])]
+    #[Groups(["getReservations"])]
     private ?Payements $payements = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
